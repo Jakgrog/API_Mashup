@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API_Mashup", "API_Mashup\API_Mashup.csproj", "{50079867-55A2-49CC-9643-1B567F6C6F59}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiMashup", "API_Mashup\ApiMashup.csproj", "{50079867-55A2-49CC-9643-1B567F6C6F59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

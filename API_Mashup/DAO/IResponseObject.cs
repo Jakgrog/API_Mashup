@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace ApiMashup.Models
+namespace ApiMashup.DAO
 {
-    public interface IMashupModel
+    public interface IResponseObject
     {
-        void PopulateModel();
     }
 }

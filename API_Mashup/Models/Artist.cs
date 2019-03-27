@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace API_Mashup.Models
+namespace ApiMashup.Models
 {
     /// <summary>
     /// Holds album information.

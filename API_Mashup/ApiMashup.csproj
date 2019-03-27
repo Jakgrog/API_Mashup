@@ -86,6 +86,10 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ArtistController.cs" />
+    <Compile Include="DAO\ArtistDAO.cs" />
+    <Compile Include="DAO\IResponseObject.cs" />
+    <Compile Include="DAO\MusicBrainzObject.cs" />
+    <Compile Include="DAO\WikipediaObject.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
