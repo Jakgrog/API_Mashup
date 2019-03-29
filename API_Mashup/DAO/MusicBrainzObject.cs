@@ -5,12 +5,13 @@ using System.Linq;
 
 namespace ApiMashup.DAO
 {
+
     public class MusicBrainzObject : IResponseObject
     {
-        public IList<Relation> Relations { get; set; }
+        public Relation[] Relations { get; set; }
 
         [JsonProperty("release-groups")]
-        public IList<ReleaseGroup> ReleaseGroups { get; set; }
+        public ReleaseGroups[] ReleaseGroups { get; set; }
 
         public string GetWikidataID()
         {
@@ -25,18 +26,21 @@ namespace ApiMashup.DAO
             return resource;
         }
     }
-    public struct Relation
+
+    public class Relation
     {
         public string Type { get; set; }
         public Url Url { get; set; }
     }
 
-    public struct Url
+
+    public class Url
     {
         public string Resource { get; set; }
+        public string Id { get; set; }
     }
 
-    public struct ReleaseGroup
+    public class ReleaseGroups
     {
         public string Title { get; set; }
         public string Id { get; set; }

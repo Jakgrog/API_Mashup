@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using ApiMashup.DAO;
 
 namespace ApiMashup.Models
 {
@@ -14,7 +15,7 @@ namespace ApiMashup.Models
     {
         public readonly string Title;
         public readonly string Id;
-        public readonly string Image;
+        public readonly Image[] Images;
 
         /// <summary>
         /// Constructor for creating Albums.
@@ -22,17 +23,17 @@ namespace ApiMashup.Models
         /// <param name="title">The album title.</param>
         /// <param name="id">The Album ID, unique for every Album.</param>
         /// <param name="image">Link to the cover image.</param>
-        public Album(string title, string id, string image)
+        public Album(string title, string id, Image[] images)
         {
             Title = title;
             Id = id;
-            Image = image;
+            Images = images;
         }
     }
     /// <summary>
     /// Artist information
     /// </summary>
-    public class Artist : IMashupModel
+    public class Artist
     {
         /// <summary>
         /// Default constructor.
@@ -46,16 +47,11 @@ namespace ApiMashup.Models
         /// Constructor for creating Artists.
         /// </summary>
         /// <param name="mbid">The mbid number that identifies the Artist.</param>
-        public Artist(string mbid, string description, IEnumerable<Album> albums)
+        public Artist(string mbid, string description, Album[] albums)
         {
             Mbid = mbid;
             Description = description;
             Albums = albums;
-        }
-
-        public void PopulateModel()
-        {
-            
         }
 
         /// <summary>
@@ -71,6 +67,6 @@ namespace ApiMashup.Models
         /// <summary>
         /// The Artist desciption.
         /// </summary>
-        public IEnumerable<Album> Albums { get; set; }
+        public Album[] Albums { get; set; }
     }
 }

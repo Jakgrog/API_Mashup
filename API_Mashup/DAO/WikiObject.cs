@@ -11,7 +11,7 @@ namespace ApiMashup.DAO
 
         public string GetDescriptionPage()
         {
-            var page = Query.Last.First().First.First["extract"];
+            JToken page = Query.Last.First().First.First["extract"];
             return page.ToString();
         }
     }

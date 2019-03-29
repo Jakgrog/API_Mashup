@@ -14,59 +14,80 @@ using Newtonsoft.Json;
 
 namespace ApiMashup.DAO
 {
-    static class ArtistDAO
+    /// <summary>
+    /// Implementing Data access objects pattern
+    /// </summary>
+    public interface IArtistDAO
+    {
+
+    }
+    public class ArtistDAO : IArtistDAO
     {
         private static HttpClient client = new HttpClient();
 
-        private static string musicBrainzUrl;
-        private static string coverArtArchiveUrl;
-        private static string wikipediaUrl;
-        private static string wikidataUrl;
+        private readonly string musicBrainzUrl;
+        private readonly string coverArtUrl;
+        private readonly string wikipediaUrl;
+        private readonly string wikidataUrl;
 
-        public static async Task<string> GetArtistAsync(string mbid)
+        public ArtistDAO()
         {
-            GetConnectionStrings();
-            MusicBrainzObject musicBrainz = await GetMusicBrainzAsync(mbid);
-            
-            //var albums = GetArtistDescriptionAsync(musicBrainz.ReleaseGroups);
-            var description = await GetArtistDescriptionAsync(musicBrainz.GetWikidataID());
-
-            return description; 
-        }
-
-        private static void GetConnectionStrings()
-        {
-            ConnectionStringSettingsCollection settings =
+            ConnectionStringSettingsCollection settings = 
                 ConfigurationManager.ConnectionStrings;
 
             if (settings != null)
             {
                 musicBrainzUrl = settings["musicbrainz"].ConnectionString;
-                coverArtArchiveUrl = settings["coverart"].ConnectionString;
+                coverArtUrl = settings["coverart"].ConnectionString;
                 wikidataUrl = settings["wikidata"].ConnectionString;
                 wikipediaUrl = settings["wikipedia"].ConnectionString;
             }
         }
 
-        private static async Task<MusicBrainzObject> GetMusicBrainzAsync(string mbid)
+        public async Task<Artist> RunGetArtistAsync(string mbid)
         {
-            return await RunAsync<MusicBrainzObject>(string.Format(musicBrainzUrl, mbid));
+            MusicBrainzObject musicBrainz = await GetMusicBrainzAsync(mbid);
+            string description = await GetArtistDescriptionAsync(musicBrainz.GetWikidataID());
+            Album[] albums = await GetAlbumsAsync(musicBrainz.ReleaseGroups);
+
+            return new Artist(mbid, description, albums);
         }
 
-        private static async Task<string> GetArtistDescriptionAsync(string id)
+        private async Task<MusicBrainzObject> GetMusicBrainzAsync(string mbid)
         {
-            WikidataObject wikiData = await RunAsync<WikidataObject>(string.Format(wikidataUrl, id));
-            WikipediaObject description = await RunAsync<WikipediaObject>(string.Format(wikipediaUrl, wikiData.GetWikipediaID()));
+            return await GetResponseAsync<MusicBrainzObject>(string.Format(musicBrainzUrl, mbid));
+            // Throw exception if bad response
+        }
+
+        private async Task<string> GetArtistDescriptionAsync(string id)
+        {
+            WikidataObject wikiData = await GetResponseAsync<WikidataObject>(string.Format(wikidataUrl, id));
+            // Throw exception if bad response
+            WikipediaObject description = await GetResponseAsync<WikipediaObject>(string.Format(wikipediaUrl, wikiData.GetWikipediaID()));
+            // Throw exception if bad response
 
             return description.GetDescriptionPage();
         }
 
-        private static async Task<IResponseObject> GetArtistAlbumsAsync(string mbid)
+        private async Task<Album[]> GetAlbumsAsync(IList<ReleaseGroups> releaseGroups)
         {
-            return await RunAsync<WikipediaObject>(string.Format(wikipediaUrl, mbid));
+            IList<Album> Albums = new List<Album>();
+
+            //TODO: Speed this upp, multiple taskt to the same server (Create a collection of tasks?)
+            foreach (ReleaseGroups group in releaseGroups)
+            {
+                CoverArt albumCoversRespons = (await GetResponseAsync<CoverArt>(string.Format(coverArtUrl, group.Id)));
+                Image[] albumImages = albumCoversRespons?.Images;
+
+                // Throw exception if bad response
+                if (albumImages != null)
+                    Albums.Add(new Album(group.Title, group.Id, albumImages));
+            }
+
+            return Albums.ToArray();
         }
 
-        private static async Task<T> RunAsync<T>(string url) where T : IResponseObject
+        private async Task<IResponseObject> GetResponseAsync<IResponseObject>(string url)
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Add("User-Agent", "C# App");
@@ -76,12 +97,13 @@ namespace ApiMashup.DAO
 
             if (response.IsSuccessStatusCode)
             {
-                var product = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<T>(product);
+                string product = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<IResponseObject>(product);
             }
             else
             {
-                return default(T);
+                //TODO: Exceptions
+                return default(IResponseObject);
             }
         }
     }
