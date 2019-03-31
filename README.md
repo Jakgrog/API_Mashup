@@ -8,3 +8,7 @@ automatically address the URL http://localhost:xxxxx/ (where xxxxx is the port).
     *  for example: http://localhost:55218/api/artist/5b11f4ce-a62d-471e-81fc-a69a8278c7da
 * You can inspect the result with the developer tools (f12). 
 However, I strongly recommend using Postman for a smoother experience.
+
+Todo:
+* Check out compression techniques and different serializers to gain speed.
+* Do a more thorough testing to find out were additional error-handling is needed.
