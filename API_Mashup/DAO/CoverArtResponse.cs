@@ -5,9 +5,15 @@ using System.Web;
 
 namespace ApiMashup.DAO
 {
-
-    public class CoverArt : IResponseObject
+    /// <summary>
+    /// Holds the cover art response
+    /// </summary>
+    public class CoverArtResponse : IResponse
     {
+        public string GetExceptionMessage()
+        {
+            return "Album not found in Cover Art Archive";
+        }
         public Image[] Images { get; set; }
 
         public string getImageUrl { get; }

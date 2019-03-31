@@ -5,14 +5,23 @@ using System.Linq;
 
 namespace ApiMashup.DAO
 {
-
-    public class MusicBrainzObject : IResponseObject
+    /// <summary>
+    /// Holds the music brainz response
+    /// </summary>
+    public class MusicBrainzResponse : IResponse
     {
+        public string GetExceptionMessage()
+        {
+            return "Invalid mbid";
+        }
         public Relation[] Relations { get; set; }
 
         [JsonProperty("release-groups")]
         public ReleaseGroups[] ReleaseGroups { get; set; }
 
+        /// <summary>
+        /// Extracs the artist wikidata ID from the wikidata relation. 
+        /// </summary>
         public string GetWikidataID()
         {
             Relation wikiRelation = Relations.FirstOrDefault(x => x.Type.Equals("wikidata", StringComparison.OrdinalIgnoreCase));
@@ -22,7 +31,6 @@ namespace ApiMashup.DAO
             {
                 resource = wikiRelation.Url.Resource.Split('/').Last();
             }
-            //TODO: Throw exeption
             return resource;
         }
     }

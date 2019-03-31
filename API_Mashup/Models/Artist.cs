@@ -10,7 +10,6 @@ namespace ApiMashup.Models
     /// Holds album information.
     /// </summary>
     // TODO: A album should also constain information about its Artists. 
-    // Use Aggregation relationship or monikers
     public struct Album
     {
         public readonly string Title;
