@@ -1,7 +1,7 @@
 ﻿namespace ApiMashup.DAO
 {
     /// <summary>
-    /// Holds the response from cover art.
+    /// Contains the response from cover art.
     /// </summary>
     public class CoverArtResponse : IResponse
     {

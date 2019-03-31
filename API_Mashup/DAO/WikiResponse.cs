@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 namespace ApiMashup.DAO
 {
     /// <summary>
-    /// Holds the response from wikipedia.
+    /// Contains the response from wikipedia.
     /// </summary>
     public class WikipediaResponse : IResponse
     {
@@ -25,7 +25,7 @@ namespace ApiMashup.DAO
     }
 
     /// <summary>
-    /// Holds the wikidata response
+    /// Contains the wikidata response
     /// </summary>
     public class WikidataResponse : IResponse
     {

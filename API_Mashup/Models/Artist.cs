@@ -3,7 +3,7 @@
 namespace ApiMashup.Models
 {
     /// <summary>
-    /// Holds album information.
+    /// Contains album information.
     /// </summary>
     // TODO: A album should also constain information about its Artists. 
     public struct Album
@@ -26,7 +26,7 @@ namespace ApiMashup.Models
         }
     }
     /// <summary>
-    /// Artist information
+    /// Contains artist information
     /// </summary>
     public class Artist
     {

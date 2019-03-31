@@ -5,7 +5,7 @@ using System.Linq;
 namespace ApiMashup.DAO
 {
     /// <summary>
-    /// Holds the response from music brainz.
+    /// Contains the response from music brainz.
     /// </summary>
     public class MusicBrainzResponse : IResponse
     {
