@@ -25,6 +25,7 @@ namespace ApiMashup.DAO
     /// </summary>
     public class ArtistDao : IArtistDao
     {
+        // A reuseable http client.
         private static HttpClient client = new HttpClient();
 
         private readonly string musicBrainzUrl;
@@ -86,8 +87,9 @@ namespace ApiMashup.DAO
         }
 
         /// <summary>
-        /// Sends a request to Wikidata, uses the ID from wikidata
-        /// to send a request to wikipedia.
+        /// Sends a request to Wikidata, uses the response from wikidata
+        /// to retriev the artist description from wikipedia. This is because
+        /// there are not always a relation between Music Brainz and wikipedia.
         /// </summary>
         /// <param name="id"></param>
         private async Task<string> GetArtistDescriptionAsync(string id)
@@ -102,7 +104,7 @@ namespace ApiMashup.DAO
             catch(Exception we)
             {
                 Debug.WriteLine(we.Message);
-                return we.Message;
+                return "No description found";
             }
         }
 
@@ -149,6 +151,8 @@ namespace ApiMashup.DAO
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Add("User-Agent", "C# App");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            // TODO: Check out compression techniques and different serializers to gain speed.
 
             HttpResponseMessage response = await client.GetAsync(url);
             string product = await response.Content.ReadAsStringAsync();

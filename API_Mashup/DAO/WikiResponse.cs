@@ -1,18 +1,16 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
 
 namespace ApiMashup.DAO
 {
     /// <summary>
-    /// Holds the wikipedia response
+    /// Holds the response from wikipedia.
     /// </summary>
     public class WikipediaResponse : IResponse
     {
         public string GetExceptionMessage()
         {
-            return "Artist not found in wikipedia";
+            return "Something went wrong when retrieving artist description from wikipedia";
         }
         public JObject Query { get; set; }
 
@@ -33,7 +31,7 @@ namespace ApiMashup.DAO
     {
         public string GetExceptionMessage()
         {
-            return "Artist not found in wikidata";
+            return "Something went wrong when retrieving wikipedia URL from Wikidata";
         }
         public JObject Entities { get; set; }
 

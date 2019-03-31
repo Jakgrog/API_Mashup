@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Linq;
 
 namespace ApiMashup.DAO
 {
     /// <summary>
-    /// Holds the music brainz response
+    /// Holds the response from music brainz.
     /// </summary>
     public class MusicBrainzResponse : IResponse
     {
