@@ -17,3 +17,5 @@ Todo:
 Possible issues:
 * "Could not find a part of the path '..\bin\roslyn\csc.exe'". Try running this in the package manager: <br />
 ```Update-Package Microsoft.CodeDom.Providers.DotNetCompilerPlatform -r```
+
+Pleas let me now if you encounter any issues and I will try to fix them as soon as possible.
