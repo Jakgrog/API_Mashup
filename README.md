@@ -2,7 +2,7 @@
 To test the API:
 * Clone the repository, you can actually clone it directly into Visual studio 2017 from github.
 * Open the solution file "APImashup.sln" with visual studio 2017.
-* Use IIS Express to run the website. A web-browser will most probably open and
+* Use IIS Express to run the API. A web-browser will most probably open and
 automatically address the URL http://localhost:xxxxx/ (where xxxxx is the port).
 * The API can be tested in the browser by specifying resource and passing a mbid:
     * http://localhost:xxxxx/api/artist/{mbid}
