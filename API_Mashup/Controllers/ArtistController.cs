@@ -16,8 +16,6 @@ namespace ApiMashup.Controllers
         [HttpGet]
         public async Task<Artist> Get(string id)
         {
-            IArtistDao artistDao = new ArtistDao();
-
             return await new ArtistDao().RunGetArtistAsync(id);
         }
     }
