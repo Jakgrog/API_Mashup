@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Configuration;
 using ApiMashup.Models;
+using ApiMashup.Validation;
 using Newtonsoft.Json;
 using System.Net;
 
@@ -158,8 +159,6 @@ namespace ApiMashup.DAO
             client.DefaultRequestHeaders.Add("User-Agent", "C# App");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             
-            // TODO: Check out compression techniques and different serializers to gain speed.
-
             HttpResponseMessage response = await client.GetAsync(url);
 
             string product = await response.Content.ReadAsStringAsync();
@@ -169,6 +168,8 @@ namespace ApiMashup.DAO
             {
                 throw new Exception(response.StatusCode.ToString() + "-" + responseObject.GetExceptionMessage());
             }
+
+            //IValidation validation = responseObject.validation
 
             return responseObject;
         }

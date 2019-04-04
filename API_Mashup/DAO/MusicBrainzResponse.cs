@@ -13,7 +13,9 @@ namespace ApiMashup.DAO
         {
             return "Invalid mbid";
         }
+
         public Relation[] Relations { get; set; }
+
 
         [JsonProperty("release-groups")]
         public ReleaseGroups[] ReleaseGroups { get; set; }

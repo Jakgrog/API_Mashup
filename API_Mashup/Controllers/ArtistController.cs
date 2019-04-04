@@ -6,7 +6,6 @@ using ApiMashup.Actionfilters;
 using WebApi.OutputCache.V2;
 using Microsoft.Web.Http;
 
-
 namespace ApiMashup.Controllers
 {
     /// <summary>
