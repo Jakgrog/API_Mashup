@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Configuration;
 using ApiMashup.Models;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace ApiMashup.DAO
 {
@@ -25,8 +26,13 @@ namespace ApiMashup.DAO
     /// </summary>
     public class ArtistDao : IArtistDao
     {
-        // A reuseable http client.
-        private static HttpClient client = new HttpClient();
+        private static HttpClientHandler handler = new HttpClientHandler()
+        {
+            AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+        };
+
+        // A reuseable http client for connection pooling.
+        private static HttpClient client = new HttpClient(handler);
 
         private readonly string musicBrainzUrl;
         private readonly string coverArtUrl;
@@ -151,10 +157,11 @@ namespace ApiMashup.DAO
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Add("User-Agent", "C# App");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            
             // TODO: Check out compression techniques and different serializers to gain speed.
 
             HttpResponseMessage response = await client.GetAsync(url);
+
             string product = await response.Content.ReadAsStringAsync();
             T responseObject = JsonConvert.DeserializeObject<T>(product);
 

@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using ApiMashup.Models;
 using ApiMashup.DAO;
+using ApiMashup.Actionfilters;
+using WebApi.OutputCache.V2;
 
 namespace ApiMashup.Controllers
 {
@@ -14,10 +16,10 @@ namespace ApiMashup.Controllers
     public class ArtistController : ApiController
     {
         [HttpGet]
+        [DeflateCompression]
+        [CacheOutput(ClientTimeSpan = 100, ServerTimeSpan = 100)]
         public async Task<Artist> Get(string id)
         {
-            IArtistDao artistDao = new ArtistDao();
-
             return await new ArtistDao().RunGetArtistAsync(id);
         }
     }
