@@ -4,6 +4,8 @@ using ApiMashup.Models;
 using ApiMashup.DAO;
 using ApiMashup.Actionfilters;
 using WebApi.OutputCache.V2;
+using Microsoft.Web.Http;
+
 
 namespace ApiMashup.Controllers
 {
@@ -16,6 +18,7 @@ namespace ApiMashup.Controllers
     public class ArtistController : ApiController
     {
         [HttpGet]
+        [ApiVersion("1.0")]
         [DeflateCompression]
         [CacheOutput(ClientTimeSpan = 100, ServerTimeSpan = 100)]
         public async Task<Artist> Get(string id)
