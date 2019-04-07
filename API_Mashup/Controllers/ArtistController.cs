@@ -1,10 +1,12 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using System.Threading.Tasks;
 using ApiMashup.Models;
 using ApiMashup.DAO;
 using ApiMashup.Actionfilters;
 using WebApi.OutputCache.V2;
 using Microsoft.Web.Http;
+using ApiMashup.Validation;
 
 namespace ApiMashup.Controllers
 {
@@ -22,7 +24,17 @@ namespace ApiMashup.Controllers
         [CacheOutput(ClientTimeSpan = 100, ServerTimeSpan = 100)]
         public async Task<Artist> Get(string id)
         {
-            return await new ArtistBuilder().RunGetArtistAsync(id);
+            IValidation input = new MbidValidation(id);
+
+            if (input.IsValid)
+            {
+                return await new ArtistBuilder().RunGetArtistAsync(id);
+            }
+            else
+            {
+                throw new Exception(input.Message.ToString());
+            }
         }
     }
 }
+

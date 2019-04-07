@@ -100,19 +100,20 @@
     <Compile Include="Actionfilters\DeflateCompressionAttribute.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ArtistController.cs" />
-    <Compile Include="DAO\ArtistDao.cs" />
-    <Compile Include="DAO\CoverArtResponse.cs" />
-    <Compile Include="DAO\IResponse.cs" />
-    <Compile Include="DAO\MusicBrainzResponse.cs" />
-    <Compile Include="DAO\WikiResponse.cs" />
+    <Compile Include="ArtistBuilder\ArtistDao.cs" />
+    <Compile Include="Models\CoverArtResponse.cs" />
+    <Compile Include="Models\IResponse.cs" />
+    <Compile Include="Models\MusicBrainzResponse.cs" />
+    <Compile Include="Models\WikiResponse.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Artist.cs" />
-    <Compile Include="Models\ArtistBuilder.cs" />
+    <Compile Include="ArtistBuilder\ArtistBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validation\CoverArtResponseValidation.cs" />
     <Compile Include="Validation\IValidation.cs" />
+    <Compile Include="Validation\MbidValidation.cs" />
     <Compile Include="Validation\MusicBrainzResponseValidation.cs" />
     <Compile Include="Validation\ValidationBase.cs" />
     <Compile Include="Validation\ValidationList.cs" />
