@@ -7,19 +7,23 @@ namespace ApiMashup.DAO
     /// </summary>
     public class CoverArtResponse : IResponse
     {
-        public string GetExceptionMessage()
-        {
-            return "Something went wrong when retrieving Album information from Cover Art Archive";
-        }
-        public IValidation Validation { get; set; }
-
         public Image[] Images { get; set; }
 
         public string getImageUrl { get; }
+        public CoverArtResponse(string m)
+        {
+            Images = new Image[1];
+            Images[0] = new Image(m);
+        }
     }
 
     public class Image
     {
         public string image { get; set; }
+
+        public Image(string m)
+        {
+            image = m;
+        }
     }
 }

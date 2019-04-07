@@ -18,11 +18,11 @@ namespace ApiMashup.Controllers
     {
         [HttpGet]
         [ApiVersion("1.0")]
-        [DeflateCompression]
+        //[DeflateCompression]
         [CacheOutput(ClientTimeSpan = 100, ServerTimeSpan = 100)]
         public async Task<Artist> Get(string id)
         {
-            return await new ArtistDao().RunGetArtistAsync(id);
+            return await new ArtistBuilder().RunGetArtistAsync(id);
         }
     }
 }

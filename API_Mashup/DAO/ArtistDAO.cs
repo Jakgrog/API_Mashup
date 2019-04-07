@@ -1,54 +1,67 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Configuration;
 using ApiMashup.Models;
-using ApiMashup.Validation;
 using Newtonsoft.Json;
 using System.Net;
+using System.Collections.Generic;
 
 namespace ApiMashup.DAO
 {
-    /// <summary>
-    /// Fetches information from the different API:s and agregates it
-    /// into an Artist object.
-    /// </summary>
-    public interface IArtistDao
+    public abstract class ArtistDao
     {
-        Task<Artist> RunGetArtistAsync(string mbid);
-    }
-    /// <summary>
-    /// Implements IArtistDao
-    /// </summary>
-    public class ArtistDao : IArtistDao
-    {
-        private static HttpClientHandler handler = new HttpClientHandler()
+        protected readonly string musicBrainzUrl;
+        protected readonly string coverArtUrl;
+        protected readonly string wikipediaUrl;
+        protected readonly string wikidataUrl;
+
+        // A Client handler used if decompression of a response is needed
+        protected static HttpClientHandler handler = new HttpClientHandler()
         {
             AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
         };
 
         // A reuseable http client for connection pooling.
-        private static HttpClient client = new HttpClient(handler);
+        protected static HttpClient client = new HttpClient(handler);
 
-        private readonly string musicBrainzUrl;
-        private readonly string coverArtUrl;
-        private readonly string wikipediaUrl;
-        private readonly string wikidataUrl;
+        /// <summary>
+        /// A generic function that sends a request to a specific url
+        /// and stores it as a IResponse object.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="url"></param>
+        protected async Task<T> GetResponseAsync<T>(string url) where T : IResponse
+        {
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Add("User-Agent", "C# App");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-        private readonly IValidationList validationList;
+            HttpResponseMessage response = await client.GetAsync(url);
+
+            string product = await response.Content.ReadAsStringAsync();
+            T responseObject = JsonConvert.DeserializeObject<T>(product);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.StatusCode.ToString());
+            }
+
+            return responseObject;
+        }
 
         /// <summary>
         /// ArtistDao constructor, reads the Url templates located in
         /// the web.config file and stores them as readonly strings.
         /// </summary>
+        // TODO: Move to subclasses 
         public ArtistDao()
         {
-            NameValueCollection settings = 
+            NameValueCollection settings =
                 ConfigurationManager.AppSettings;
 
             if (settings != null)
@@ -58,83 +71,69 @@ namespace ApiMashup.DAO
                 wikidataUrl = settings["wikidata"].ToString();
                 wikipediaUrl = settings["wikipedia"].ToString();
             }
-
-            validationList = new ValidationList();
         }
+    }
 
-        /// <summary>
-        /// Creates an Artist object from the information 
-        /// retrieved from the different API:s. 
-        /// </summary>
-        /// <param name="mbid"></param>
-        public async Task<Artist> RunGetArtistAsync(string mbid)
-        {
-            string description = string.Empty;
-            Album[] albums = null;
-            MusicBrainzResponse musicBrainz;
-
-            musicBrainz = await GetMusicBrainzAsync(mbid);
-            description = await GetArtistDescriptionAsync(musicBrainz.GetWikidataID());
-            albums = await GetAlbumsAsync(musicBrainz.ReleaseGroups);
-
-            return new Artist(mbid, description, albums);
-        }
-
-        /// <summary>
-        /// Sends a request to Music brainz
-        /// </summary>
-        /// <param name="mbid"></param>
-        private async Task<MusicBrainzResponse> GetMusicBrainzAsync(string mbid)
+    /// <summary>
+    /// Sends a request to Music brainz
+    /// </summary>
+    /// <param name="mbid"></param>
+    public class MusicBrainzDao : ArtistDao
+    {
+        public async Task<MusicBrainzResponse> GetAsync(string mbid)
         {
             try
             {
                 return await GetResponseAsync<MusicBrainzResponse>(string.Format(musicBrainzUrl, mbid));
             }
-            catch(Exception we)
+            catch (Exception we)
             {
-                Debug.WriteLine(we.Message); 
+                Debug.WriteLine(we.Message);
                 throw;
             }
         }
+    }
 
-        /// <summary>
-        /// Sends a request to Wikidata, uses the response from wikidata
-        /// to retriev the artist description from wikipedia. This is because
-        /// there are not always a relation between Music Brainz and wikipedia.
-        /// </summary>
-        /// <param name="id"></param>
-        private async Task<string> GetArtistDescriptionAsync(string id)
+    /// <summary>
+    /// Sends a request to Wikidata, uses the response from wikidata
+    /// to retriev the artist description from wikipedia. This is because
+    /// there are not always a relation between Music Brainz and wikipedia.
+    /// </summary>
+    /// <param name="id"></param>
+    public class ArtistDescriptionDao : ArtistDao
+    {
+        public async Task<WikipediaResponse> GetAsync(string id)
         {
+            WikipediaResponse description = null;
             try
             {
                 WikidataResponse wikiData = await GetResponseAsync<WikidataResponse>(string.Format(wikidataUrl, id));
-                WikipediaResponse description = await GetResponseAsync<WikipediaResponse>(string.Format(wikipediaUrl, wikiData.GetWikipediaID()));
+                description = await GetResponseAsync<WikipediaResponse>(string.Format(wikipediaUrl, wikiData.GetWikipediaID()));
 
-                return description.GetDescriptionPage();
+                return description;
             }
-            catch(Exception we)
+            catch (Exception we)
             {
                 Debug.WriteLine(we.Message);
-                return "No description found";
             }
-        }
 
-        /// <summary>
-        /// Selects all release groups in the release groups list and runs the 
-        /// GetAlbumAsync function with each groups Id and Title as in parameters.
-        /// </summary>
-        /// <param name="releaseGroups"></param>
-        private async Task<Album[]> GetAlbumsAsync(IList<ReleaseGroups> releaseGroups)
+            return description;
+        }
+    }
+
+    public class ArtistAlbumsDao : ArtistDao
+    {
+        public async Task<Album[]> GetAsync(IList<ReleaseGroups> releaseGroups)
         {
             return await Task.WhenAll(releaseGroups.Select(x => GetAlbumAsync(x.Id, x.Title)));
         }
-
         /// <summary>
         /// Sends a request to Cover art archive and generates
         /// an Album object.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="title"></param>
+
         private async Task<Album> GetAlbumAsync(string id, string title)
         {
             Image[] albumImages = default(Image[]);
@@ -143,41 +142,12 @@ namespace ApiMashup.DAO
                 CoverArtResponse albumCoversRespons = await GetResponseAsync<CoverArtResponse>(string.Format(coverArtUrl, id));
                 albumImages = albumCoversRespons?.Images;
             }
-            catch(Exception we)
+            catch (Exception we)
             {
                 Debug.WriteLine(we.Message);
             }
 
             return new Album(title, id, albumImages);
-        }
-
-        /// <summary>
-        /// A generic function that sends a request to a specific url
-        /// and stores it as a IResponse object.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="url"></param>
-        private async Task<T> GetResponseAsync<T>(string url) where T : IResponse
-        {
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Add("User-Agent", "C# App");
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            
-            HttpResponseMessage response = await client.GetAsync(url);
-
-            string product = await response.Content.ReadAsStringAsync();
-            T responseObject = JsonConvert.DeserializeObject<T>(product);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception(response.StatusCode.ToString() + "-" + responseObject.GetExceptionMessage());
-            }
-
-            IValidation validation = responseObject.Validation;
-            validation.Validate();
-            string message = validation.Message;
-
-            return responseObject;
         }
     }
 }

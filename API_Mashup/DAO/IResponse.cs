@@ -8,7 +8,5 @@ namespace ApiMashup.DAO
     /// </summary>
     public interface IResponse
     {
-        IValidation Validation { get; set; }
-        string GetExceptionMessage();
     }
 }

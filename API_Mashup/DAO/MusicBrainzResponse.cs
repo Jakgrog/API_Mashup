@@ -10,13 +10,7 @@ namespace ApiMashup.DAO
     /// </summary>
     public class MusicBrainzResponse : IResponse
     {
-        public string GetExceptionMessage()
-        {
-            return "Invalid mbid";
-        }
-
         public Relation[] Relations { get; set; }
-        public IValidation Validation { get; set; }
 
         [JsonProperty("release-groups")]
         public ReleaseGroups[] ReleaseGroups { get; set; }

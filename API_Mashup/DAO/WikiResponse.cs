@@ -9,13 +9,7 @@ namespace ApiMashup.DAO
     /// </summary>
     public class WikipediaResponse : IResponse
     {
-        public string GetExceptionMessage()
-        {
-            return "Something went wrong when retrieving artist description from wikipedia";
-        }
         public JObject Query { get; set; }
-        public IValidation Validation { get; set; }
-
         /// <summary>
         /// Extracts the artist description from the JQuery response.
         /// </summary>
@@ -31,12 +25,7 @@ namespace ApiMashup.DAO
     /// </summary>
     public class WikidataResponse : IResponse
     {
-        public string GetExceptionMessage()
-        {
-            return "Something went wrong when retrieving wikipedia URL from Wikidata";
-        }
         public JObject Entities { get; set; }
-        public IValidation Validation { get; set; }
 
         /// <summary>
         /// Extracts the band name needed to find the description in wikipedia
