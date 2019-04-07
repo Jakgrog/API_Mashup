@@ -1,7 +1,8 @@
 ﻿using ApiMashup.Models;
 using System.Threading.Tasks;
+using ApiMashup.ArtistBuilder;
 
-namespace ApiMashup.ApiMashup
+namespace ApiMashup.ArtistBuilder
 {
     /// <summary>
     /// Fetches information from the different API:s and agregates it
@@ -14,7 +15,7 @@ namespace ApiMashup.ApiMashup
     /// <summary>
     /// Implements IArtistDao
     /// </summary>
-    public class ArtistBuilder : IArtistBuilder
+    public class ArtistBuilderObject : IArtistBuilder
     {
         /// <summary>
         /// Creates an Artist object from the information 

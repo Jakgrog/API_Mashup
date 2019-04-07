@@ -99,6 +99,9 @@
   <ItemGroup>
     <Compile Include="Actionfilters\DeflateCompressionAttribute.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="ArtistBuilder\ArtistAlbumsDao.cs" />
+    <Compile Include="ArtistBuilder\ArtistDescriptionDao.cs" />
+    <Compile Include="ArtistBuilder\MusicBrainzDao.cs" />
     <Compile Include="Controllers\ArtistController.cs" />
     <Compile Include="ArtistBuilder\ArtistDao.cs" />
     <Compile Include="Models\CoverArtResponse.cs" />

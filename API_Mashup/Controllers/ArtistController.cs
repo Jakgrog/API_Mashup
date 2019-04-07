@@ -2,8 +2,7 @@
 using System.Web.Http;
 using System.Threading.Tasks;
 using ApiMashup.Models;
-using ApiMashup.DAO;
-using ApiMashup.Actionfilters;
+using ApiMashup.ArtistBuilder;
 using WebApi.OutputCache.V2;
 using Microsoft.Web.Http;
 using ApiMashup.Validation;
@@ -28,7 +27,7 @@ namespace ApiMashup.Controllers
 
             if (input.IsValid)
             {
-                return await new ArtistBuilder().RunGetArtistAsync(id);
+                return await new ArtistBuilderObject().RunGetArtistAsync(id);
             }
             else
             {
