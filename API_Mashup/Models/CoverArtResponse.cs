@@ -1,6 +1,6 @@
 ﻿using ApiMashup.Validation;
 
-namespace ApiMashup.DAO
+namespace ApiMashup.Models
 {
     /// <summary>
     /// Contains the response from cover art.

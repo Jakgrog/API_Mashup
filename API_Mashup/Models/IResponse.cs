@@ -1,6 +1,6 @@
 ﻿using ApiMashup.Validation;
 
-namespace ApiMashup.DAO
+namespace ApiMashup.Models
 {
     /// <summary>
     /// Contains the deserialized information from a response message

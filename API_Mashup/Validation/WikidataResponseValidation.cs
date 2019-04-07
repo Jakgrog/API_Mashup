@@ -1,5 +1,4 @@
-﻿using System;
-using ApiMashup.DAO;
+﻿using ApiMashup.Models;
 
 namespace ApiMashup.Validation
 {

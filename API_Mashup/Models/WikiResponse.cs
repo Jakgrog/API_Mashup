@@ -1,8 +1,7 @@
 ﻿using System.Linq;
 using Newtonsoft.Json.Linq;
-using ApiMashup.Validation;
 
-namespace ApiMashup.DAO
+namespace ApiMashup.Models
 {
     /// <summary>
     /// Contains the response from wikipedia.

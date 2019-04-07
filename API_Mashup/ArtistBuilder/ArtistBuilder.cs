@@ -1,7 +1,7 @@
-﻿using ApiMashup.DAO;
+﻿using ApiMashup.Models;
 using System.Threading.Tasks;
 
-namespace ApiMashup.Models
+namespace ApiMashup.ApiMashup
 {
     /// <summary>
     /// Fetches information from the different API:s and agregates it

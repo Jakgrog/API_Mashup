@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using ApiMashup.DAO;
+using ApiMashup.Models;
 
 namespace ApiMashup.Validation
 {

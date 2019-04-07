@@ -1,6 +1,4 @@
-﻿using ApiMashup.DAO;
-
-namespace ApiMashup.Models
+﻿namespace ApiMashup.Models
 {
     /// <summary>
     /// Contains album information.
