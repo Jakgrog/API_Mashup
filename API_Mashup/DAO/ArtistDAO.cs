@@ -40,6 +40,8 @@ namespace ApiMashup.DAO
         private readonly string wikipediaUrl;
         private readonly string wikidataUrl;
 
+        private readonly IValidationList validationList;
+
         /// <summary>
         /// ArtistDao constructor, reads the Url templates located in
         /// the web.config file and stores them as readonly strings.
@@ -56,6 +58,8 @@ namespace ApiMashup.DAO
                 wikidataUrl = settings["wikidata"].ToString();
                 wikipediaUrl = settings["wikipedia"].ToString();
             }
+
+            validationList = new ValidationList();
         }
 
         /// <summary>
@@ -169,7 +173,9 @@ namespace ApiMashup.DAO
                 throw new Exception(response.StatusCode.ToString() + "-" + responseObject.GetExceptionMessage());
             }
 
-            //IValidation validation = responseObject.validation
+            IValidation validation = responseObject.Validation;
+            validation.Validate();
+            string message = validation.Message;
 
             return responseObject;
         }

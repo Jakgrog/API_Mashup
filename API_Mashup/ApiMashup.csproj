@@ -114,6 +114,7 @@
     <Compile Include="Validation\IValidation.cs" />
     <Compile Include="Validation\MusicBrainzResponseValidation.cs" />
     <Compile Include="Validation\ValidationBase.cs" />
+    <Compile Include="Validation\ValidationList.cs" />
     <Compile Include="Validation\WikidataResponseValidation.cs" />
     <Compile Include="Validation\WikipediaResponseValidation.cs" />
   </ItemGroup>

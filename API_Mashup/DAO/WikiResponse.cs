@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Newtonsoft.Json.Linq;
+using ApiMashup.Validation;
 
 namespace ApiMashup.DAO
 {
@@ -13,6 +14,7 @@ namespace ApiMashup.DAO
             return "Something went wrong when retrieving artist description from wikipedia";
         }
         public JObject Query { get; set; }
+        public IValidation Validation { get; set; }
 
         /// <summary>
         /// Extracts the artist description from the JQuery response.
@@ -34,6 +36,7 @@ namespace ApiMashup.DAO
             return "Something went wrong when retrieving wikipedia URL from Wikidata";
         }
         public JObject Entities { get; set; }
+        public IValidation Validation { get; set; }
 
         /// <summary>
         /// Extracts the band name needed to find the description in wikipedia

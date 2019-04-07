@@ -1,4 +1,6 @@
-﻿namespace ApiMashup.DAO
+﻿using ApiMashup.Validation;
+
+namespace ApiMashup.DAO
 {
     /// <summary>
     /// Contains the deserialized information from a response message
@@ -6,6 +8,7 @@
     /// </summary>
     public interface IResponse
     {
+        IValidation Validation { get; set; }
         string GetExceptionMessage();
     }
 }

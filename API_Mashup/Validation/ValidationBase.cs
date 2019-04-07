@@ -17,6 +17,15 @@ namespace ApiMashup.Validation
     {
         protected T Context { get; private set; }
 
+        protected ValidationBase(T context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+            Context = context;
+        }
+
         public void Validate()
         {
             if (!IsValid)

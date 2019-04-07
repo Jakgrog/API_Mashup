@@ -1,6 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using System.Linq;
+using ApiMashup.Validation;
 
 namespace ApiMashup.DAO
 {
@@ -15,7 +16,7 @@ namespace ApiMashup.DAO
         }
 
         public Relation[] Relations { get; set; }
-
+        public IValidation Validation { get; set; }
 
         [JsonProperty("release-groups")]
         public ReleaseGroups[] ReleaseGroups { get; set; }

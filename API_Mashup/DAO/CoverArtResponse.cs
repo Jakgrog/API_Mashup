@@ -1,4 +1,6 @@
-﻿namespace ApiMashup.DAO
+﻿using ApiMashup.Validation;
+
+namespace ApiMashup.DAO
 {
     /// <summary>
     /// Contains the response from cover art.
@@ -9,6 +11,8 @@
         {
             return "Something went wrong when retrieving Album information from Cover Art Archive";
         }
+        public IValidation Validation { get; set; }
+
         public Image[] Images { get; set; }
 
         public string getImageUrl { get; }
