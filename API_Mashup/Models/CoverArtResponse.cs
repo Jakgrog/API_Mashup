@@ -9,7 +9,6 @@ namespace ApiMashup.Models
     {
         public Image[] Images { get; set; }
 
-        public string getImageUrl { get; }
         public CoverArtResponse(string m)
         {
             Images = new Image[1];

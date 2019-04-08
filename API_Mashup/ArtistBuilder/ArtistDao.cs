@@ -27,7 +27,7 @@ namespace ApiMashup.ArtistBuilder
         // A reuseable http client for connection pooling.
         protected static HttpClient client = new HttpClient(handler);
 
-        protected readonly ValidationList validationList;
+        protected ValidationList validationList;
 
         protected bool IsValid()
         {
@@ -71,8 +71,6 @@ namespace ApiMashup.ArtistBuilder
         {
             NameValueCollection settings =
                 ConfigurationManager.AppSettings;
-
-            validationList = new ValidationList();
 
             if (settings != null)
             {

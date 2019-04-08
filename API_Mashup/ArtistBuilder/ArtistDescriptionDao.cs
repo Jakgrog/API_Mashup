@@ -17,7 +17,10 @@ namespace ApiMashup.ArtistBuilder
         private WikipediaResponse description;
         private void CreateValidationList(WikidataResponse wikiDataContext, WikipediaResponse wikipediaContext)
         {
-            validationList.Add(new WikidataUrlValidation(wikiDataContext));
+            validationList = new ValidationList{
+                new WikidataUrlValidation(wikiDataContext),
+                new WikipediaPagesExtractValidation(wikipediaContext)
+            };
         }
         public async Task<WikipediaResponse> GetAsync(string id)
         {
@@ -28,17 +31,17 @@ namespace ApiMashup.ArtistBuilder
 
                 // Add validation objects that you want to validate to the validation list
                 CreateValidationList(wikiData, description);
-
-                // Validate all validation objects
-                if (!IsValid())
-                {
-                    throw new Exception(ErrorMessage());
-                }
+                validationList.Validate();
             }
-            catch (Exception we)
+            catch (ValidationException we)
             {
                 Debug.WriteLine(we.Message);
                 throw;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("An error occured when requesting data from Wikipedia or wikidata, "
+                    , e.InnerException);
             }
 
             return description;

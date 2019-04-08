@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Web.Http;
 using System.Threading.Tasks;
-using ApiMashup.Models;
 using ApiMashup.ArtistBuilder;
 using WebApi.OutputCache.V2;
 using Microsoft.Web.Http;
 using ApiMashup.Validation;
+using ApiMashup.Actionfilters;
 
 namespace ApiMashup.Controllers
 {
@@ -19,9 +19,9 @@ namespace ApiMashup.Controllers
     {
         [HttpGet]
         [ApiVersion("1.0")]
-        //[DeflateCompression]
+        [DeflateCompression]
         [CacheOutput(ClientTimeSpan = 100, ServerTimeSpan = 100)]
-        public async Task<Artist> Get(string id)
+        public async Task<object> Get(string id)
         {
             IValidation input = new MbidValidation(id);
 
@@ -31,8 +31,15 @@ namespace ApiMashup.Controllers
             }
             else
             {
-                throw new Exception(input.Message.ToString());
+                return new { Error = input.Message };
             }
+        }
+
+        [HttpGet]
+        [ApiVersion("1.0")]
+        public object Get()
+        {
+            return new { Error = "Please enter a mbid" };
         }
     }
 }

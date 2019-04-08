@@ -1,4 +1,7 @@
-﻿namespace ApiMashup.Models
+﻿using Microsoft.Web.Http;
+
+
+namespace ApiMashup.Models
 {
     /// <summary>
     /// Contains album information.

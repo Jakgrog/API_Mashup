@@ -13,7 +13,9 @@ namespace ApiMashup.ArtistBuilder
         private CoverArtResponse coverArtResponse;
         private void CreateValidationList(CoverArtResponse context)
         {
-            validationList.Add(new CoverArtImagesValidation(context));
+            validationList = new ValidationList{
+                new CoverArtImagesValidation(context),
+            };
         }
         /// <summary>
         /// Sends a request to Cover art archive and generates
@@ -23,23 +25,25 @@ namespace ApiMashup.ArtistBuilder
         /// <param name="title"></param>
         private async Task<Album> GetAlbumAsync(string id, string title)
         {
-            Image[] albumImages = new Image[] { new Image("No images found") };
-            ;
+            Image[] albumImages;
+            
             try
             {
                 coverArtResponse = await GetResponseAsync<CoverArtResponse>(string.Format(coverArtUrl, id));
                 albumImages = coverArtResponse?.Images;
 
                 CreateValidationList(coverArtResponse);
-
-                if (!IsValid())
-                {
-                    throw new Exception(ErrorMessage());
-                }
+                validationList.Validate();
             }
-            catch (Exception we)
+            catch (ValidationException ve)
             {
-                Debug.WriteLine(we.Message);
+                albumImages = new Image[] { new Image("Images could not be found") };
+                Debug.WriteLine(ve.Message);
+            }
+            catch(Exception e)
+            {
+                albumImages = new Image[] { new Image("Images could not be found") };
+                Debug.WriteLine(e.Message);
             }
 
             return new Album(title, id, albumImages);
