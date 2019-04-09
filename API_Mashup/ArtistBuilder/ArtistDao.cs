@@ -13,6 +13,7 @@ namespace ApiMashup.ArtistBuilder
 {
     public abstract class ArtistDao
     {
+        // Url:s to the external API:s.
         protected readonly string musicBrainzUrl;
         protected readonly string coverArtUrl;
         protected readonly string wikipediaUrl;
@@ -27,15 +28,20 @@ namespace ApiMashup.ArtistBuilder
         // A reuseable http client for connection pooling.
         protected static HttpClient client = new HttpClient(handler);
 
+        // A list that contains all validation objects
         protected ValidationList validationList;
 
+        // The error message that will be thrown if tha data in the response is invalid.
+        protected string errorMessage;
+
+        // Runs the validate function on all validation objects in the validation list.
         protected bool IsValid()
         {
             validationList.Validate();
+            errorMessage = validationList.Messages.ToString();
+
             return validationList.IsValid;
         }
-
-        protected string ErrorMessage() => validationList.Messages.ToString();
 
         /// <summary>
         /// A generic function that sends a request to a specific url
@@ -52,14 +58,14 @@ namespace ApiMashup.ArtistBuilder
             HttpResponseMessage response = await client.GetAsync(url);
 
             string product = await response.Content.ReadAsStringAsync();
-            T responseObject = JsonConvert.DeserializeObject<T>(product);
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception(response.StatusCode.ToString());
+                throw new WebException("Status code: " + response.StatusCode.ToString() + 
+                    " recieved when requesting data from: " + url);
             }
 
-            return responseObject;
+            return JsonConvert.DeserializeObject<T>(product);
         }
 
         /// <summary>

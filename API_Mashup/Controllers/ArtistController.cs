@@ -21,25 +21,25 @@ namespace ApiMashup.Controllers
         [ApiVersion("1.0")]
         [DeflateCompression]
         [CacheOutput(ClientTimeSpan = 100, ServerTimeSpan = 100)]
-        public async Task<object> Get(string id)
+        public async Task<IHttpActionResult> Get(string id)
         {
             IValidation input = new MbidValidation(id);
 
             if (input.IsValid)
             {
-                return await new ArtistBuilderObject().RunGetArtistAsync(id);
+                return Ok(await new ArtistBuilderObject().RunGetArtistAsync(id));
             }
             else
             {
-                return new { Error = input.Message };
+                return BadRequest(input.Message);
             }
         }
 
         [HttpGet]
         [ApiVersion("1.0")]
-        public object Get()
+        public IHttpActionResult Get()
         {
-            return new { Error = "Please enter a mbid" };
+            return BadRequest("Please enter a mbid");
         }
     }
 }

@@ -35,8 +35,8 @@ namespace ApiMashup.ArtistBuilder
             }
             catch (ValidationException we)
             {
+                description = new WikipediaResponse();
                 Debug.WriteLine(we.Message);
-                throw;
             }
             catch (Exception e)
             {
