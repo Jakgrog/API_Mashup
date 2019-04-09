@@ -7,13 +7,9 @@ namespace ApiMashup.Models
     /// </summary>
     public class CoverArtResponse : IResponse
     {
+        // Array with all cover images
         public Image[] Images { get; set; }
 
-        public CoverArtResponse(string m)
-        {
-            Images = new Image[1];
-            Images[0] = new Image(m);
-        }
     }
 
     public class Image

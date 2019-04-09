@@ -15,6 +15,10 @@ namespace ApiMashup.ArtistBuilder
     public class ArtistDescriptionDao : ArtistDao
     {
         private WikipediaResponse description;
+
+        /// <summary>
+        /// Create list of validation objects
+        /// </summary>
         private void CreateValidationList(WikidataResponse wikiDataContext, WikipediaResponse wikipediaContext)
         {
             validationList = new ValidationList{
@@ -22,6 +26,14 @@ namespace ApiMashup.ArtistBuilder
                 new WikipediaPagesExtractValidation(wikipediaContext)
             };
         }
+
+        /// <summary>
+        /// Sends a request to wikidata to recieve a wikipedia ID.
+        /// The wikipedia ID is then used to request the artist 
+        /// description from wikipedia.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<WikipediaResponse> GetAsync(string id)
         {
             try

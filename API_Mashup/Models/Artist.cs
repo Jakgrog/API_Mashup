@@ -26,6 +26,7 @@ namespace ApiMashup.Models
             Images = images;
         }
     }
+
     /// <summary>
     /// Contains artist information
     /// </summary>

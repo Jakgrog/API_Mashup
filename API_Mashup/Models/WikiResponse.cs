@@ -15,7 +15,7 @@ namespace ApiMashup.Models
         public string GetDescriptionPage()
         {
             JToken page = Query.Last.First().First.First["extract"];
-            return page == default(JToken) ? page.ToString() : "Description could not be found";
+            return page != default(JToken) ? page.ToString() : "Description could not be found";
         }
     }
 

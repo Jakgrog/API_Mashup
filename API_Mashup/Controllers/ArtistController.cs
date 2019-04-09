@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Threading.Tasks;
 using ApiMashup.ArtistBuilder;
 using WebApi.OutputCache.V2;

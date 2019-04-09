@@ -9,8 +9,10 @@ namespace ApiMashup.Models
     /// </summary>
     public class MusicBrainzResponse : IResponse
     {
+        // Array with relations to other APIs
         public Relation[] Relations { get; set; }
 
+        // Array with release groups
         [JsonProperty("release-groups")]
         public ReleaseGroups[] ReleaseGroups { get; set; }
 

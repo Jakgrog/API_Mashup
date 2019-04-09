@@ -5,15 +5,15 @@ using ApiMashup.ArtistBuilder;
 namespace ApiMashup.ArtistBuilder
 {
     /// <summary>
-    /// Fetches information from the different API:s and agregates it
-    /// into an Artist object.
+    /// Uses DAO:s to receive information from the different API:s 
+    /// and agregates it into an Artist object.
     /// </summary>
     public interface IArtistBuilder
     {
         Task<Artist> RunGetArtistAsync(string mbid);
     }
     /// <summary>
-    /// Implements IArtistDao
+    /// Implements IArtistBuilder
     /// </summary>
     public class ArtistBuilderObject : IArtistBuilder
     {
@@ -24,8 +24,8 @@ namespace ApiMashup.ArtistBuilder
         /// <param name="mbid"></param>
         public async Task<Artist> RunGetArtistAsync(string mbid)
         {
-            WikipediaResponse description = null;
-            Album[] albums = null;
+            WikipediaResponse description;
+            Album[] albums;
             MusicBrainzResponse musicBrainz;
 
             musicBrainz = await new MusicBrainzDao().GetAsync(mbid);

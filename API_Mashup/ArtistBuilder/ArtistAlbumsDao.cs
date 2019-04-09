@@ -11,6 +11,10 @@ namespace ApiMashup.ArtistBuilder
     public class ArtistAlbumsDao : ArtistDao
     {
         private CoverArtResponse coverArtResponse;
+
+        /// <summary>
+        /// Create list of validation objects
+        /// </summary>
         private void CreateValidationList(CoverArtResponse context)
         {
             validationList = new ValidationList{
@@ -19,7 +23,7 @@ namespace ApiMashup.ArtistBuilder
         }
         /// <summary>
         /// Sends a request to Cover art archive and generates
-        /// an Album object.
+        /// an Album object with the album title, mbid and cover images.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="title"></param>
@@ -49,6 +53,11 @@ namespace ApiMashup.ArtistBuilder
             return new Album(title, id, albumImages);
         }
 
+        /// <summary>
+        /// Runs GetAlbumAsync for all release groups. Returns an array of Albums.
+        /// </summary>
+        /// <param name="releaseGroups"></param>
+        /// <returns></returns>
         public async Task<Album[]> GetAsync(IList<ReleaseGroups> releaseGroups)
         {
             return await Task.WhenAll(releaseGroups.Select(x => GetAlbumAsync(x.Id, x.Title)));

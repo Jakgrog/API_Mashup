@@ -13,7 +13,10 @@ namespace ApiMashup.ArtistBuilder
     public class MusicBrainzDao : ArtistDao
     {
         private MusicBrainzResponse musicBrainsResponse;
-
+        
+        /// <summary>
+        /// Create list of validation objects
+        /// </summary>
         private void CreateValidationList(MusicBrainzResponse context)
         {
             validationList = new ValidationList{
@@ -23,6 +26,12 @@ namespace ApiMashup.ArtistBuilder
             };
         }
 
+        /// <summary>
+        /// Sends a request to music brainz API with the specific mbid.
+        /// Stores release groups and relations in a music brainz response. 
+        /// </summary>
+        /// <param name="mbid"></param>
+        /// <returns></returns>
         public async Task<MusicBrainzResponse> GetAsync(string mbid)
         {
             try
