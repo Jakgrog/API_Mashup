@@ -11,8 +11,10 @@ automatically address the URL http://localhost:xxxxx/ (where xxxxx is the port).
 However, I strongly recommend using Postman for a smoother experience.
 
 Todo:
-* Check out compression techniques and different serializers to gain speed.
+* Check out different serializers to gain speed.
 * Do a more thorough testing to find out were additional error-handling is needed.
+* Log to file or database instead of just writing to console
+* Add unit testing
 
 Possible issues:
 * "Could not find a part of the path '..\bin\roslyn\csc.exe'". Try running this in the package manager: <br />
