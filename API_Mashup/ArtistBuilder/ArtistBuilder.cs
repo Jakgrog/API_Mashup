@@ -37,15 +37,18 @@ namespace ApiMashup.ArtistBuilder
         /// <param name="mbid"></param>
         public async Task<Artist> RunGetArtistAsync(string mbid)
         {
-            WikipediaResponse description;
             MusicBrainzResponse musicBrainz;
+            string description;
             Album[] albums;
 
+            // Sends request to the API:s by calling the Dao:s GetAsync functions. 
             musicBrainz = await new MusicBrainzDao().GetAsync(mbid);
-            description = await new ArtistDescriptionDao().GetAsync(musicBrainz.GetWikidataID());
-            albums = await Task.WhenAll(musicBrainz.ReleaseGroups.Select(x => CreateAlbumAsync(x.Id, x.Title)));
+            description = (await new ArtistDescriptionDao().
+                GetAsync(musicBrainz.GetWikidataID())).GetDescriptionPage();
+            albums = await Task.WhenAll(musicBrainz.ReleaseGroups.
+                Select(x => CreateAlbumAsync(x.Id, x.Title)));
 
-            return new Artist(mbid, description.GetDescriptionPage(), albums);
+            return new Artist(mbid, description, albums);
         }
     }
 }

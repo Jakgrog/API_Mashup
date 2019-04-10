@@ -7,7 +7,7 @@ using ApiMashup.Models;
 namespace ApiMashup.ArtistBuilder
 {
     /// <summary>
-    /// Sends a request to Wikidata, uses the response from wikidata
+    /// Sends a request to Wikidata API, uses the response from wikidata
     /// to retriev the artist description from wikipedia. This is because
     /// there are not always a relation between Music Brainz and wikipedia.
     /// </summary>
@@ -52,8 +52,9 @@ namespace ApiMashup.ArtistBuilder
             }
             catch (Exception e)
             {
-                throw new Exception("An error occured when requesting data from Wikipedia or wikidata, "
-                    , e.InnerException);
+                description = new WikipediaResponse();
+                Debug.WriteLine("An error occured when requesting data from Wikipedia or wikidata. "
+                    , e.Message);
             }
 
             return description;

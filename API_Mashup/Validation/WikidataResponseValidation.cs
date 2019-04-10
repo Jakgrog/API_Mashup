@@ -2,6 +2,12 @@
 
 namespace ApiMashup.Validation
 {
+    /// <summary>
+    /// Checks if there is a wikipedia ID. 
+    /// If not, it checks what element in the wikidata
+    /// response that is empty by starting from the root
+    /// of the Json object.
+    /// </summary>
     public class WikidataUrlValidation : ValidationBase<WikidataResponse>
     {
         public WikidataUrlValidation(WikidataResponse context) : base(context) { }
