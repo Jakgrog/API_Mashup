@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Linq;
 
@@ -10,11 +11,11 @@ namespace ApiMashup.Models
     public class MusicBrainzResponse : IResponse
     {
         // Array with relations to other APIs
-        public Relation[] Relations { get; set; }
+        public IList<Relation> Relations { get; set; }
 
         // Array with release groups
         [JsonProperty("release-groups")]
-        public ReleaseGroups[] ReleaseGroups { get; set; }
+        public IList<ReleaseGroups> ReleaseGroups { get; set; }
 
         /// <summary>
         /// Extracs the artist wikidata ID from the wikidata relation. 

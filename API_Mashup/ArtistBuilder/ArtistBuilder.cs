@@ -1,6 +1,8 @@
 ﻿using ApiMashup.Models;
 using System.Threading.Tasks;
 using ApiMashup.ArtistBuilder;
+using System.Linq;
+
 
 namespace ApiMashup.ArtistBuilder
 {
@@ -18,6 +20,17 @@ namespace ApiMashup.ArtistBuilder
     public class ArtistBuilderObject : IArtistBuilder
     {
         /// <summary>
+        /// Creates an Album from a cover art response.
+        /// </summary>
+        /// <param name="releaseGroups"></param>
+        /// <returns></returns>
+        private async Task<Album> CreateAlbumAsync(string id, string title)
+        {
+            CoverArtResponse coverArtResponse = await new ArtistAlbumsDao().GetAsync(id);
+
+            return new Album(title, id, coverArtResponse.Images);
+        }
+        /// <summary>
         /// Creates an Artist object from the information 
         /// retrieved from the different API:s. 
         /// </summary>
@@ -25,12 +38,12 @@ namespace ApiMashup.ArtistBuilder
         public async Task<Artist> RunGetArtistAsync(string mbid)
         {
             WikipediaResponse description;
-            Album[] albums;
             MusicBrainzResponse musicBrainz;
+            Album[] albums;
 
             musicBrainz = await new MusicBrainzDao().GetAsync(mbid);
             description = await new ArtistDescriptionDao().GetAsync(musicBrainz.GetWikidataID());
-            albums = await new ArtistAlbumsDao().GetAsync(musicBrainz.ReleaseGroups);
+            albums = await Task.WhenAll(musicBrainz.ReleaseGroups.Select(x => CreateAlbumAsync(x.Id, x.Title)));
 
             return new Artist(mbid, description.GetDescriptionPage(), albums);
         }

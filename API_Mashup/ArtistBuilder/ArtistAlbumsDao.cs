@@ -22,45 +22,30 @@ namespace ApiMashup.ArtistBuilder
             };
         }
         /// <summary>
-        /// Sends a request to Cover art archive and generates
-        /// an Album object with the album title, mbid and cover images.
+        /// Sends a request to Cover art archive and returns a coverArtResponse object.
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="title"></param>
-        private async Task<Album> GetAlbumAsync(string id, string title)
-        {
-            Image[] albumImages;
-            
+        public async Task<CoverArtResponse> GetAsync(string id)
+        {  
             try
             {
                 coverArtResponse = await GetResponseAsync<CoverArtResponse>(string.Format(coverArtUrl, id));
-                albumImages = coverArtResponse?.Images;
 
                 CreateValidationList(coverArtResponse);
                 validationList.Validate();
             }
             catch (ValidationException ve)
             {
-                albumImages = new Image[] { new Image("Images could not be found") };
+                coverArtResponse = new CoverArtResponse(new Image("Images could not be found"));
                 Debug.WriteLine(ve.Message);
             }
             catch(Exception e)
             {
-                albumImages = new Image[] { new Image("Images could not be found") };
+                coverArtResponse = new CoverArtResponse(new Image("Images could not be found"));
                 Debug.WriteLine(e.Message);
             }
 
-            return new Album(title, id, albumImages);
-        }
-
-        /// <summary>
-        /// Runs GetAlbumAsync for all release groups. Returns an array of Albums.
-        /// </summary>
-        /// <param name="releaseGroups"></param>
-        /// <returns></returns>
-        public async Task<Album[]> GetAsync(IList<ReleaseGroups> releaseGroups)
-        {
-            return await Task.WhenAll(releaseGroups.Select(x => GetAlbumAsync(x.Id, x.Title)));
+            return coverArtResponse;
         }
     }
 }
